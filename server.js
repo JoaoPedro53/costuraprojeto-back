@@ -12,12 +12,24 @@ app.get('/pedidos', (req, res) => {
 })
 
 app.post('/pedidos', (req, res) => {
-    pedidos.push(req.body)
-    return res.json(pedidos)
+    const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = req.body
     const pedido = {
-
+    nome,
+    data,
+    contato,
+	tamanho,
+	quantidade,
+	data_entrega,
+	escola,
+	pagamento,
+	tipo_pedido,
+	superior,
+	inferior,
+	obs
     }
-    
+  banco.inserir(pedido)
+  pedidos.push(pedido)
+  return res.json(pedido)
 })
 
 app.delete('/pedidos/:id', async(req, res) => {

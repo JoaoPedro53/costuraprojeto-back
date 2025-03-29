@@ -35,7 +35,14 @@ class Banco {
 
     );`;
     await banco.exec(tabela)
-}}
+ }
+ async inserir(pedido){
+    const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = pedido
+     const banco = await this.sqlConnection();
+     await banco.run("INSERT INTO Pedidos (nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs) values (?, ?, ?, ? , ?, ?, ? , ?, ?, ?, ?, ?)", nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs)
+}
+}
+
 
 
 module.exports = Banco;
