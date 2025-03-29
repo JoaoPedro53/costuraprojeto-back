@@ -15,13 +15,10 @@ app.post('/pedidos', (req, res) => {
     pedidos.push(req.body)
     return res.json(pedidos)
     const pedido = {
-        
-    }
-})
 
-app.listen(3333, () => {
-    console.log("Servidor on")
-  })
+    }
+    
+})
 
 app.delete('/pedidos/:id', async(req, res) => {
     const {id} = req.params
@@ -36,3 +33,8 @@ app.put('pedidos/:id', (req, res) => {
 
     return res.json({mensage: "Atualizado com sucesso"})
 })
+
+
+app.listen(3333, () => {
+    console.log("Servidor on")
+  })
