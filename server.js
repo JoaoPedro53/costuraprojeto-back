@@ -7,8 +7,18 @@ const banco = new Banco()
 
 const pedidos = []
 
-app.get('/pedidos', (req, res) => {
-    res.send(pedidos)
+app.get('/pedidos/:id?', async (req, res) => {
+    const { id } = req.params
+
+    if(id) {
+    const pos = await banco.consult(id)
+    if(!pos) {
+        return res.json({mensage: "Pedido não encontrado"})
+    } 
+    return res.json(pos)
+    }
+    const lista = await banco.listar()
+    return res.json(lista)
 })
 
 app.post('/pedidos', (req, res) => {
@@ -27,23 +37,48 @@ app.post('/pedidos', (req, res) => {
 	inferior,
 	obs
     }
+
   banco.inserir(pedido)
   pedidos.push(pedido)
   return res.json(pedido)
 })
 
-app.delete('/pedidos/:id', async(req, res) => {
-    const {id} = req.params
-    console.log(id)
+app.delete('/pedidos/:id', async (req, res) => {
+    const { id } = req.params
+    const pos = await banco.consult(id)
+    if(!pos) {
+        return res.json({mensage: "Pedido não encontrado"})
+    }
 
-    return res.json({mensage: "Removido com sucesso"})
+    banco.remover(id)
+    return res.json({mensage: "Pedido removido com sucesso"})
 })
 
-app.put('pedidos/:id', (req, res) => {
-    const {id} = req.params
-    console.log(id)
+app.put('/pedidos/:id', async (req, res) => {
+    const { id } = req.params
+    const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = req.body
+    const pedido = {
+        id,
+        nome,
+        data,
+        contato,
+        tamanho,
+        quantidade,
+        data_entrega,
+        escola,
+        pagamento,
+        tipo_pedido,
+        superior,
+        inferior,
+        obs
+    }
 
-    return res.json({mensage: "Atualizado com sucesso"})
+    const pos = await banco.consult(id)
+    if(!pos) {
+        return res.json({mensage: "Pedido não encontrado"})
+    }
+    banco.atualizar(pedido)
+    return res.json({mensage: "Pedido atualizado com sucesso"})
 })
 
 

@@ -39,8 +39,28 @@ class Banco {
  async inserir(pedido){
     const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = pedido
      const banco = await this.sqlConnection();
-     await banco.run("INSERT INTO Pedidos (nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs) values (?, ?, ?, ? , ?, ?, ? , ?, ?, ?, ?, ?)", nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs)
+     await banco.run("INSERT INTO Pedidos ( nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs) values ( ?, ?, ?, ? , ?, ?, ? , ?, ?, ?, ?, ?)", nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs)
 }
+async listar(){
+    const banco = await this.sqlConnection();
+    const result = await banco.all("SELECT * FROM pedidos")
+    return result 
+}
+async remover(id){
+    const banco = await this.sqlConnection();
+    await banco.run("DELETE FROM pedidos WHERE id=?", id)
+}
+async consult(id){
+    const banco = await this.sqlConnection();
+    const result = await banco.get("SELECT * FROM pedidos WHERE id = ?", id)
+    return result 
+}
+async atualizar(pedido){
+    const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs, id } = pedido
+    const banco = await this.sqlConnection();
+    await banco.run("UPDATE pedidos SET nome=?, data=?, contato=?, tamanho=?, quantidade=?, data_entrega=?, escola=?, pagamento=?, tipo_pedido=?, superior=?, inferior=?, obs=? WHERE id=?", nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs, id)
+}
+
 }
 
 
