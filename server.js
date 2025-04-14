@@ -1,11 +1,13 @@
 const express = require("express")
+const cors = require("cors")
 const app = express()
+app.use(cors())
 app.use(express.json())
 
 const Banco = require('./banco')
 const banco = new Banco()
 
-const pedidos = []
+app.use(cors())
 
 app.get('/pedidos/:id?', async (req, res) => {
     const { id } = req.params
@@ -39,7 +41,6 @@ app.post('/pedidos', (req, res) => {
     }
 
   banco.inserir(pedido)
-  pedidos.push(pedido)
   return res.json(pedido)
 })
 
