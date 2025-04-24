@@ -1,5 +1,6 @@
 const express = require("express")
 const cors = require("cors")
+const crypto = require('crypto');
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -22,10 +23,26 @@ app.get('/pedidos/:id?', async (req, res) => {
     const lista = await banco.listar()
     return res.json(lista)
 })
+app.get('/pedidos/data/:data_entrega', async (req, res) => {
+    const { data_entrega } = req.params
+    if(data_entrega) {
+     const pos = await banco.consultData(data_entrega)
+      if(!pos) {
+         return res.json({mensage: "Pedido não encontrado"})
+        } 
+         return res.json(pos)
+        }
+            
+    const lista = await banco.listar()
+    return res.json(lista)
+})
+
 
 app.post('/pedidos', (req, res) => {
     const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = req.body
+    const uuid = crypto.randomUUID();
     const pedido = {
+    uuid,
     nome,
     data,
     contato,

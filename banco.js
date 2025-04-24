@@ -20,6 +20,7 @@ class Banco {
     
     const tabela = `CREATE TABLE IF NOT EXISTS Pedidos (
                      id integer PRIMARY KEY AUTOINCREMENT,
+                     uuid varchar(100) NOT NULL,
                      nome varchar (100),
                      data date,
                      contato int(10),
@@ -37,9 +38,9 @@ class Banco {
     await banco.exec(tabela)
  }
  async inserir(pedido){
-    const { nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = pedido
+    const { uuid, nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs } = pedido
      const banco = await this.sqlConnection();
-     await banco.run("INSERT INTO Pedidos ( nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs) values ( ?, ?, ?, ? , ?, ?, ? , ?, ?, ?, ?, ?)", nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs)
+     await banco.run("INSERT INTO Pedidos ( uuid, nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs) values ( ?, ?, ?, ?, ? , ?, ?, ? , ?, ?, ?, ?, ?)", uuid, nome, data, contato, tamanho, quantidade, data_entrega, escola, pagamento, tipo_pedido, superior, inferior, obs)
 }
 async listar(){
     const banco = await this.sqlConnection();
@@ -53,6 +54,11 @@ async remover(id){
 async consult(id){
     const banco = await this.sqlConnection();
     const result = await banco.get("SELECT * FROM pedidos WHERE id = ?", id)
+    return result 
+}
+async consultData(data_entrega){
+    const banco = await this.sqlConnection();
+    const result = await banco.all("SELECT * FROM pedidos WHERE data_entrega  = ?", data_entrega)
     return result 
 }
 async atualizar(pedido){
