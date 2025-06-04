@@ -3,9 +3,9 @@ const mysql = require('mysql2/promise');
 class Banco {
     constructor() {
         this.pool = mysql.createPool({
-            host: 'localhost',
-            user: 'root',
-            password: 'Pedro32@_84',
+            host: '',
+            user: '',
+            password: '',
             database: 'mysql',
             waitForConnections: true,
             connectionLimit: 10,
